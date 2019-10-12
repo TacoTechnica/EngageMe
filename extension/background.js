@@ -3,6 +3,14 @@
 // key = "<video_url>" 
 var tracker_intervals = {}
 
+// SUPREME TURBO JANK MODE ENGAGE
+// ALL OF THESE use the url of the video as a key
+// The last interval that we're updating live
+var last_start = {},
+    last_end =   {};
+// AH AH AH JOTARU-SAN, YOU THINK YOU'VE SEEN THE
+// EXTENT OF MY JANKINESS??? BAAAAKARUU
+var video_length = {};
 
 // TODO: Username. Figure this shit out
 var _username = "emptyuser";
@@ -14,14 +22,15 @@ function get_username() {
 // Record a watch interval.
 //    start: Time where the user started watching
 //    end  : Time where the user ended watching
-function tracker_record_interval(username, video_url, start, end) {
+function tracker_record_interval(username, video_url, start, end, length) {
   // TODO: Consistency
   var key = video_url;
   if (!(key in tracker_intervals)) {
-    alert("New key: " + key);
+    //alert("New key: " + key);
     tracker_intervals[key] = [];
-    alert(Object.keys(tracker_intervals));
+    //alert(Object.keys(tracker_intervals));
   }
+  video_length[key] = length;
   // If our start value is close enough to the last
   // end value, merge the two intervals together and
   // ignore the small blip of watch that the user probably
@@ -49,11 +58,30 @@ chrome.runtime.onMessage.addListener(
       "from a content script:" + sender.tab.url :
       "from the extension"
     );
-    if (request.type == "interval") {
-      sendResponse("gucci");
-      // TODO: Username
-      _username = request.user;
-      tracker_record_interval(_username, request.url, request.start, request.end);
+    switch (request.type) {
+      case "interval":
+        // TODO: Username
+        _username = request.user;
+        tracker_record_interval(_username, request.url, request.start, request.end, request.length);
+        sendResponse("gucci");
+        break;
+      case "interval_end":
+        var key = request.url;
+        last_start[key] = request.start;
+        last_end[key] = request.time;
+        // TODO: Username
+        _username = request.user;
+        // If the tracker interval list for this url doesn't exist, make it.
+
+        if (!(key in tracker_intervals)) {
+          //alert("interval New key: " + key + ", " + request.start + ":" + request.time);
+          tracker_intervals[key] = [];
+        }
+        video_length[key] = request.length;
+
+        sendResponse("gucci");
+        break;
+
     }
     sendResponse("oops");
   }
@@ -62,14 +90,13 @@ chrome.runtime.onMessage.addListener(
 
 // Update all tabs that aren't here anymore
 function tracker_send_all(username) {
-  alert("Send All Called");
+  //alert("Send All Called");
   chrome.tabs.getAllInWindow(null, function(tabs) {
     // Store all of the current open tabs in a set
     var tabset = new Set([]);
     for (var i = 0; i < tabs.length; i++) {
       var open_tab = tabs[i];
       tabset.add(open_tab.url);
-      //alert("DEBUG: set: " + open_tab.url);
       console.log("DEBUG: set: " + open_tab.url);
       //chrome.tabs.sendRequest(tabs[i].id, { action: "xxx" });                         
     }
@@ -82,12 +109,12 @@ function tracker_send_all(username) {
       // TODO: Consistency
       // TODO: kinda jank but, it works. Right?
       var url = key;
-      alert("DEBUG: TRYING: " + key);
+      //alert("DEBUG: TRYING: " + key);
       console.log("DEBUG: TRYING: " + url);
       if (!tabset.has(url)) {
-        alert("DEBUG: Did not find " + url + " in set!");
+        //alert("DEBUG: Did not find " + url + " in set!");
         console.log("DEBUG: Did not find " + url + " in set!");
-        tracker_send_data(username, url);
+        tracker_send_data(username, url, video_length[url]);
       }
     }
   });
@@ -95,23 +122,32 @@ function tracker_send_all(username) {
 
 
 // We've recorded our user's tracking data, now send it.
-function tracker_send_data(username, video_url) {
+function tracker_send_data(username, video_url, length) {
   // TODO: Consistency
   var key = video_url;
+
+  // Add the last interval if it exists
+  var last_begin    = last_start[key],
+      last_finish   = last_end[key];
+  if (last_begin != undefined && last_finish != undefined) {
+    //alert("Aw yeah: " + last_begin + " -> " + last_finish);
+    tracker_record_interval(username, video_url, last_begin, last_finish);
+  }
 
   var intervals = tracker_intervals[key];
 
   // TODO: Debugging prints
   console.log("SENDING INTERVALS");
   console.log(intervals);
-  //alert("SENDING");
   // Merge the tracked intervals
   intervals = merge_intervals(intervals);
 
   var url = "loalhost" + "/TODO: Figure me out";
   var data = {
     "user": username,
-    "intervals": intervals
+    "video_url": video_url,
+    "video_length": length,
+    "intervals": intervals,
   };
   $.ajax({
     type: "POST",
