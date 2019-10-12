@@ -1,0 +1,23 @@
+{
+  "name": "EngageMe",
+  "version": "1.10.37",
+  "description": "Analyzes YouTube Engagement, save time!",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/watch*",
+        "https://leccap.engin.umich.edu/leccap/*"
+      ],
+      "js": [
+        "display.js",
+        "tracker.js",
+        "main.js"
+      ]
+    }
+  ],
+  "icons": {
+    "64": "icon64.png",
+    "128": "icon128.png"
+  },
+  "manifest_version": 2
+}
