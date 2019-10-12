@@ -127,14 +127,18 @@ function tracker_send_data() {
   // Merge the tracked intervals
   var intervals = merge_intervals(tracker_intervals);
 
-  var url = "???";
+  var url = "loalhost" + "/TODO: Figure me out";
   var data = {
     "user": user_id,
     "intervals": intervals
   };
-  $.post(url, data, function(data, status) {
-    // TODO: Handle server/internet errors
-    console.log("SENT INTERVAL DATA. Received data: " + data + "\nStatus: " + status);
-  });
-  
+  $.post(
+    url,
+    data,
+    function(data, status) {
+      // TODO: Handle server/internet errors
+      console.log("SENT INTERVAL DATA. Received data: " + data + "\nStatus: " + status);
+    }
+  );
+
 }
