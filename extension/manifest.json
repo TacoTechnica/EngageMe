@@ -3,8 +3,16 @@
   "version": "1.10.37",
   "description": "Analyzes YouTube Engagement, save time!",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
+  "background": {
+    "matches": [
+      "https://www.youtube.com/watch*",
+      "https://leccap.engin.umich.edu/leccap/*"
+    ],
+    "scripts":["lib/jquery.min.js", "background.js"]
+  },
   "content_scripts": [
     {
       "matches": [

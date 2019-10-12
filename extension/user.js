@@ -13,6 +13,7 @@ function getRandomToken() {
     return hex;
 }
 
+// Generate user id
 chrome.storage.sync.get('userid', function(items) {
     var userid = items.userid;
     if (userid) {
@@ -22,5 +23,12 @@ chrome.storage.sync.get('userid', function(items) {
         chrome.storage.sync.set({userid: userid}, function() {
             user_id = userid;
         });
+    }
+});
+
+// Communication with the background script
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    if (msg.text === 'are_you_there_content_script?') {
+      sendResponse({status: "yes"});
     }
 });
