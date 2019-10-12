@@ -2,6 +2,9 @@
   "name": "EngageMe",
   "version": "1.10.37",
   "description": "Analyzes YouTube Engagement, save time!",
+  "permissions": [
+    "storage"
+  ],
   "content_scripts": [
     {
       "matches": [
