@@ -7,6 +7,8 @@
  *
  */
 
+// jquery must be imported (look at manifest.json and README.md)
+
 // Tracks the last time updated
 var tracker_last_time = -1;
 var tracker_paused = true; // We assume video is not playing
@@ -41,9 +43,6 @@ function tracker_record_interval(start, end) {
   // Otherwise, just add the interval.
   tracker_intervals.push( {"start": start, "end": end} );
 
-  // TODO TODO: pls pls delete lmao
-  // TODO: DEBUG. Delete me pls
-  tracker_send_data();
 }
 
 // Given a video, keep track of a user's engagement.
@@ -80,10 +79,62 @@ function tracker_track_engagement(video) {
   });
 }
 
+// Thank you leetcode
+function merge_intervals(intervals) {
+
+    if (intervals.length == 0) {
+        return [];
+    }
+
+    // Sort by start time
+    intervals.sort(function(left, right) {
+        return left["start"] - right["start"]
+    });
+
+    result = [];
+
+    var start = intervals[0]["start"];
+    var end = intervals[0]["end"];
+    for(var i = 1; i < intervals.length; ++i) {
+        var interval = intervals[i];
+        // If we're beyond the range
+        if (interval["start"] > end) {
+            result.push([start, end]);
+            start = interval["start"];
+            end = interval["end"];
+        } else {
+            // If our end is below, we're ignored.
+            if (interval["end"] <= end) {
+                // Ignore
+                continue;
+            } else if (interval["start"] <= end) {
+                end = interval["end"];
+            }
+        }
+    }
+    // At the end: Push left over
+    result.push([start, end]);
+
+    return result;
+}
+
 // We've recorded our user's tracking data, now send it.
 function tracker_send_data() {
   // TODO: Debugging prints
-  console.log("TEST: INTERVALS");
+  console.log("SENDING INTERVALS");
   console.log(tracker_intervals);
-  // TODO: Fill me
+
+  // Merge the tracked intervals
+  var intervals = merge_intervals(tracker_intervals);
+
+  var url = "???";
+  var data = {
+    "user": user_id,
+    "intervals": intervals
+  };
+  $.post(url, data, function(data, status) {
+    // TODO: Handle server/internet errors
+    console.log("SENT INTERVAL DATA. Received data: " + data + "\nStatus: " + status);
+  });
+  
 }
