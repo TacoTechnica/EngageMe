@@ -9,6 +9,8 @@
         "https://leccap.engin.umich.edu/leccap/*"
       ],
       "js": [
+        "lib/jquery.min.js",
+        "user.js",
         "display.js",
         "tracker.js",
         "main.js"
