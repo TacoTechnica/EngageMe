@@ -41,17 +41,17 @@ function tracker_record_interval(username, video_url, start, end, length) {
   var len = tracker_intervals[key].length; 
   if (len != 0) {
     var prev = tracker_intervals[key][ len - 1 ];
-    var delta = Math.abs(start - prev["end"]);
+    var delta = Math.abs(start - prev[1]);
     // TODO: Arbitrary constant
     if (delta < 0.9) {
       // Too close, merge and quit.
-      tracker_intervals[key][ len - 1 ]["end"] = end;
+      tracker_intervals[key][ len - 1 ][1] = end;
       return;
     }
   }
 
   // Otherwise, just add the interval.
-  tracker_intervals[key].push( {"start": start, "end": end} );
+  tracker_intervals[key].push( [start, end] );//{"start": start, "end": end} );
 }
 
 // Receive data from our extension and append to our interval storage
@@ -214,27 +214,27 @@ function merge_intervals(intervals) {
 
   // Sort by start time
   intervals.sort(function(left, right) {
-    return left["start"] - right["start"]
+    return left[0] - right[0];//left["start"] - right["start"]
   });
 
   result = [];
 
-  var start = intervals[0]["start"];
-  var end = intervals[0]["end"];
+  var start = intervals[0][0];
+  var end = intervals[0][1];
   for(var i = 1; i < intervals.length; ++i) {
     var interval = intervals[i];
     // If we're beyond the range
-    if (interval["start"] > end) {
+    if (interval[0] > end) {
       result.push([start, end]);
-      start = interval["start"];
-      end = interval["end"];
+      start = interval[0];
+      end = interval[1];
     } else {
       // If our end is below, we're ignored.
-      if (interval["end"] <= end) {
+      if (interval[1] <= end) {
         // Ignore
         continue;
-      } else if (interval["start"] <= end) {
-        end = interval["end"];
+      } else if (interval[0] <= end) {
+        end = interval[1];
       }
     }
   }
