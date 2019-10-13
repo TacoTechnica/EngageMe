@@ -8,11 +8,11 @@
   ],
   "background": {
     "matches": [
-      "https://www.youtube.com/watch*",
-      "https://leccap.engin.umich.edu/leccap/*"
+      "*://www.youtube.com/watch*",
+      "*://leccap.engin.umich.edu/leccap/*"
     ],
     "scripts":[
-      "lib/jquery.min.js",
+      "jquery-3.4.1.min.js",
       "background_tracker.js",
       "background_display.js"
     ]
@@ -20,11 +20,11 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.youtube.com/watch*",
-        "https://leccap.engin.umich.edu/leccap/*"
+        "*://www.youtube.com/watch*",
+        "*://leccap.engin.umich.edu/leccap/*"
       ],
       "js": [
-        "lib/jquery.min.js",
+        "jquery-3.4.1.min.js",
         "user.js",
         "display.js",
         "tracker.js",
