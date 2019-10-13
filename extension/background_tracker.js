@@ -3,6 +3,9 @@
 // key = "<video_url>" 
 var tracker_intervals = {}
 
+var server_hostname = "https://16369a47.ngrok.io";//"engageme-be.appspot.com";
+
+
 // SUPREME TURBO JANK MODE ENGAGE
 // ALL OF THESE use the url of the video as a key
 // The last interval that we're updating live
@@ -142,28 +145,38 @@ function tracker_send_data(username, video_url, length) {
   // Merge the tracked intervals
   intervals = merge_intervals(intervals);
 
-  var url = "loalhost" + "/TODO: Figure me out";
+  var url = server_hostname + "/api/interval";
   var data = {
-    "user": username,
-    "video_url": video_url,
-    "video_length": length,
+    "uuid": username,
+    "url": video_url,
+    "length": length,
     "intervals": intervals,
   };
   $.ajax({
     type: "POST",
     url: url,
-    data: data,
+    data: JSON.stringify(data),
+    headers: {
+        'Access-Control-Allow-Origin': '*'//,
+        //'Access-Control-Allow-Credentials': 'true'
+    },
+    contentType: "application/json",
+	dataType: 'json',
     success: function() {
       // Delete our data and say we gucci
       alert("DEBUG: Data Sent!");
       console.log("Data Sent");
-      tracker_intervals.delete(key);
+      delete tracker_intervals[key];
+      //tracker_intervals.delete(key);
     },
     error: function() {
       alert("DEBUG: Data failed to send! But we got here.");
       // If you're here to remove this, I don't blame you.
       console.error("I don't EAT them because they're shaped like DINOSAURS, I EAT them because they're FUCKING CHICKEN NUGGETS");
       console.error("Failed to send data to " + url + " with key:  " + key);
+      // TODO: maybe delete
+      delete tracker_intervals[key];
+      //tracker_intervals.delete(key);
     }
   });
 }

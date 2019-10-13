@@ -11,7 +11,11 @@
       "https://www.youtube.com/watch*",
       "https://leccap.engin.umich.edu/leccap/*"
     ],
-    "scripts":["lib/jquery.min.js", "background.js"]
+    "scripts":[
+      "lib/jquery.min.js",
+      "background_tracker.js",
+      "background_display.js"
+    ]
   },
   "content_scripts": [
     {
