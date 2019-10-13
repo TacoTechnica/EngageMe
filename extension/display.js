@@ -35,13 +35,33 @@ function get_interval(index) {
 function get_and_display_json_data(video, window_url) {
   //TODO get data from backend.
   // structure: [[start,end], [start, end], ...]
-  var jsonArr = null;
-  if (jsonArr) {
-    var parsed = json.parse(jsonArr);
-    for (var arr in jsonArr) {
-      display_interval(arr[0], arr[1], video.duration, window_url);
+  var server_hostname = 'https://16369a47.ngrok.io';
+  var url = server_hostname + '/api/video?url=' + window_url;
+  $.ajax({
+    url: url,
+    type: 'GET',
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+    contentType: "application/json",
+    dataType: 'json',
+    success: function (jsonArr) {
+      // console.log(jsonArr);
+      if (!$.isEmptyObject(jsonArr)) {
+        jsonArr.average_intervals.forEach(function (arr) {
+          console.log(arr[0], arr[1])
+          display_interval(arr[0], arr[1], video.duration, window_url);
+        });
+      }
     }
-  }
+  });
+  // var jsonArr = null;
+  // if (jsonArr) {
+  //   var parsed = json.parse(jsonArr);
+  //   for (var arr in jsonArr) {
+  //     display_interval(arr[0], arr[1], video.duration, window_url);
+  //   }
+  // }
 }
 
 // Given a "video" element, display the intervals we received from the server
@@ -88,5 +108,5 @@ function display_interval(start, end, duration, src) {
 function handleVideo(video) {
   console.log("Video duration: " + video.duration);
   console.log("Video source: " + video.src);
-  get_and_display_json_data();
+  get_and_display_json_data(video, window.location.href);
 }
