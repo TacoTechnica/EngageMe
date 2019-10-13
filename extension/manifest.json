@@ -13,8 +13,7 @@
     ],
     "scripts":[
       "jquery-3.4.1.min.js",
-      "background_tracker.js",
-      "background_display.js"
+      "background_tracker.js"
     ]
   },
   "content_scripts": [
