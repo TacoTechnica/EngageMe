@@ -35,7 +35,7 @@ function get_interval(index) {
 function get_and_display_json_data(video, window_url) {
   //TODO get data from backend.
   // structure: [[start,end], [start, end], ...]
-  var server_hostname = 'https://16369a47.ngrok.io';
+  var server_hostname = 'https://engageme-be.appspot.com';
   var url = server_hostname + '/api/video?url=' + window_url;
   $.ajax({
     url: url,
