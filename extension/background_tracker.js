@@ -149,6 +149,7 @@ function tracker_send_data(username, video_url, length) {
   var data = {
     "uuid": username,
     "url": video_url,
+    "name": video_url,
     "length": length,
     "intervals": intervals,
   };

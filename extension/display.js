@@ -31,16 +31,17 @@ function get_interval(index) {
   return display_intervals[index]
 }
 
-// Load data from the server, use "add_interval" to add all of our intervals
-function get_json_data(url) {
-  //TODO link with backend
-  return null;
-}
-
-function display_json_data(obj) {
-  //TODO parse list of lists from backend
+// Load data from the server, use "display_interval" to add all of our intervals
+function get_and_display_json_data(video, window_url) {
+  //TODO get data from backend.
   // structure: [[start,end], [start, end], ...]
-  var parsed = json.parse(obj)
+  var jsonArr = null;
+  if (jsonArr) {
+    var parsed = json.parse(jsonArr);
+    for (var arr in jsonArr) {
+      display_interval(arr[0], arr[1], video.duration, window_url);
+    }
+  }
 }
 
 // Given a "video" element, display the intervals we received from the server
@@ -87,23 +88,5 @@ function display_interval(start, end, duration, src) {
 function handleVideo(video) {
   console.log("Video duration: " + video.duration);
   console.log("Video source: " + video.src);
-  var json_data = get_json_data(window.location.href);
-  if (json_data) {
-    console.log(json_data);
-  }
+  get_and_display_json_data();
 }
-
-
-// Get the video element. Depends on the site
-//function display_intervals_get_video() {
-//  // TODO: At the moment these are the same, so this switch case might be useless.
-//  switch (window.location.host) {
-//    case "www.youtube.com":
-//    case "leccap.engin.umich.edu":
-//      return document.getElementsByTagName("video")[0];
-//  }
-//  // At this point, we have a problem
-//  console.error("Aw fucc, unknown window location host: " + window.location.host);
-//  return null;
-//}
-
