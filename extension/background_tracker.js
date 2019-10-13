@@ -165,13 +165,13 @@ function tracker_send_data(username, video_url, length) {
 	dataType: 'json',
     success: function() {
       // Delete our data and say we gucci
-      alert("DEBUG: Data Sent!");
+      //alert("DEBUG: Data Sent!");
       console.log("Data Sent");
       delete tracker_intervals[key];
       //tracker_intervals.delete(key);
     },
     error: function() {
-      alert("DEBUG: Data failed to send! But we got here.");
+      //alert("DEBUG: Data failed to send! But we got here.");
       // If you're here to remove this, I don't blame you.
       console.error("I don't EAT them because they're shaped like DINOSAURS, I EAT them because they're FUCKING CHICKEN NUGGETS");
       console.error("Failed to send data to " + url + " with key:  " + key);
