@@ -32,3 +32,22 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       sendResponse({status: "yes"});
     }
 });
+
+
+// function done(video) {stuff}
+function get_video(done) {
+  var observer = new MutationObserver(function (mutations, me) {
+    var video = document.getElementsByTagName('video');
+    if (video && video[0] && !Number.isNaN(video[0].duration)) {
+      done(video[0]);
+      me.disconnect();
+      return;
+    }
+  });
+
+  // start observing
+  observer.observe(document, {
+    childList: true,
+    subtree: true
+  });
+}

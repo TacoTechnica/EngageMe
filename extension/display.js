@@ -93,36 +93,17 @@ function handleVideo(video) {
   }
 }
 
-// Get the video element. Depends on the site
-function display_all_intervals() {
-  // set up the mutation observer
-  var observer = new MutationObserver(function (mutations, me) {
-    var video = document.getElementsByTagName('video');
-    if (video && video[0] && !Number.isNaN(video[0].duration)) {
-      handleVideo(video[0]);
-      me.disconnect();
-      return;
-    }
-  });
-
-  // start observing
-  observer.observe(document, {
-    childList: true,
-    subtree: true
-  });
-
-}
 
 // Get the video element. Depends on the site
-function display_intervals_get_video() {
-  // TODO: At the moment these are the same, so this switch case might be useless.
-  switch (window.location.host) {
-    case "www.youtube.com":
-    case "leccap.engin.umich.edu":
-      return document.getElementsByTagName("video")[0];
-  }
-  // At this point, we have a problem
-  console.error("Aw fucc, unknown window location host: " + window.location.host);
-  return null;
-}
+//function display_intervals_get_video() {
+//  // TODO: At the moment these are the same, so this switch case might be useless.
+//  switch (window.location.host) {
+//    case "www.youtube.com":
+//    case "leccap.engin.umich.edu":
+//      return document.getElementsByTagName("video")[0];
+//  }
+//  // At this point, we have a problem
+//  console.error("Aw fucc, unknown window location host: " + window.location.host);
+//  return null;
+//}
 
