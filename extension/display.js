@@ -112,3 +112,17 @@ function display_all_intervals() {
   });
 
 }
+
+// Get the video element. Depends on the site
+function display_intervals_get_video() {
+  // TODO: At the moment these are the same, so this switch case might be useless.
+  switch (window.location.host) {
+    case "www.youtube.com":
+    case "leccap.engin.umich.edu":
+      return document.getElementsByTagName("video")[0];
+  }
+  // At this point, we have a problem
+  console.error("Aw fucc, unknown window location host: " + window.location.host);
+  return null;
+}
+
