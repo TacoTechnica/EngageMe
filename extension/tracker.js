@@ -24,7 +24,14 @@ function get_user() {
 }
 // Return the video url, or what we consider a "unique" video key
 function get_url() {
-  return window.location.href;
+  var url = window.location.href
+  // Chop off the useless stuff
+  switch (window.location.host) {
+    case "www.youtube.com":
+      url = url.split("&")[0];
+      break;
+  }
+  return url
 }
 
 
