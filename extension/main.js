@@ -1,3 +1,5 @@
+var video = display_intervals_get_video();
+
 if (video != null) {
   console.log("TEST: EXTENSION LOADED");
   // Load and show the engagement intervals from the backend
