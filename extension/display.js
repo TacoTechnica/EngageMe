@@ -46,7 +46,7 @@ function get_and_display_json_data(video, window_url) {
     contentType: "application/json",
     dataType: 'json',
     success: function (jsonArr) {
-      // console.log(jsonArr);
+      console.log(jsonArr);
       if (!$.isEmptyObject(jsonArr)) {
         jsonArr.average_intervals.forEach(function (arr) {
           console.log(arr[0], arr[1])
