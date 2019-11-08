@@ -12,44 +12,44 @@
 //  "start" : number (seconds),
 //  "end"   : number (seconds)
 // }
-var display_intervals = []
+var display_intervals = [];
 
 // Adds an interval
 function add_interval(start, end) {
   display_intervals.push({
-    "start": start,
-    "end": end
+    start: start,
+    end: end
   });
 }
 
 // Setter and getter for interval data
 function interval_count() {
-  return display_intervals.length
+  return display_intervals.length;
 }
 
 function get_interval(index) {
-  return display_intervals[index]
+  return display_intervals[index];
 }
 
 // Load data from the server, use "display_interval" to add all of our intervals
 function get_and_display_json_data(video, window_url) {
   //TODO get data from backend.
   // structure: [[start,end], [start, end], ...]
-  var server_hostname = 'https://engageme-be.appspot.com';
-  var url = server_hostname + '/api/video?url=' + window_url;
+  var server_hostname = "https://engageme-be.appspot.com";
+  var url = server_hostname + "/api/video?url=" + window_url;
   $.ajax({
     url: url,
-    type: 'GET',
+    type: "GET",
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      "Access-Control-Allow-Origin": "*"
     },
     contentType: "application/json",
-    dataType: 'json',
-    success: function (jsonArr) {
+    dataType: "json",
+    success: function(jsonArr) {
       console.log(jsonArr);
       if (!$.isEmptyObject(jsonArr)) {
-        jsonArr.average_intervals.forEach(function (arr) {
-          console.log(arr[0], arr[1])
+        jsonArr.average_intervals.forEach(function(arr) {
+          console.log(arr[0], arr[1]);
           display_interval(arr[0], arr[1], video.duration, window_url);
         });
       }
@@ -66,41 +66,47 @@ function get_and_display_json_data(video, window_url) {
 
 // Given a "video" element, display the intervals we received from the server
 function display_interval(start, end, duration, src) {
-  if (src.indexOf("youtube.com") !== -1) { // search for youtube
+  if (src.indexOf("youtube.com") !== -1) {
+    // search for youtube
     var t_div = document.createElement("div");
-    t_div.id = 'yt_pt';
+    t_div.id = "yt_pt";
     t_div.style.zIndex = 33;
-    t_div.style.position = 'absolute';
-    t_div.style.height = '100%';
-    t_div.style.bottom = '0%';
-    t_div.style.transformOrigin = '0 0';
-    t_div.style.left = (start / duration) * 100 + '%';
-    t_div.style.width = ((end - start) / duration) * 100 + '%';
-    t_div.style.background = '#00dcff';
+    t_div.style.position = "absolute";
+    t_div.style.height = "100%";
+    t_div.style.bottom = "0%";
+    t_div.style.transformOrigin = "0 0";
+    t_div.style.left = (start / duration) * 100 + "%";
+    t_div.style.width = ((end - start) / duration) * 100 + "%";
+    t_div.style.background = "#00dcff";
 
     //locate div that we inject into
-    var p_list = document.getElementsByClassName('ytp-progress-list')[0];
+    var p_list = document.getElementsByClassName("ytp-progress-list")[0];
 
     //inject div into div
     p_list.appendChild(t_div);
-  } else if (src.indexOf("leccap.engin.umich.edu") !== -1) { // search for leccap
+  } else if (src.indexOf("leccap.engin.umich.edu") !== -1) {
+    // search for leccap
     var t_div = document.createElement("div");
-    t_div.id = 'lc_pt';
+    t_div.id = "lc_pt";
     t_div.style.zIndex = 1;
-    t_div.style.position = 'absolute';
-    t_div.style.height = '8px';
-    t_div.style.top = '0%';
-    t_div.style.left = (start / duration) * 100 + '%';
-    t_div.style.width = ((end - start) / duration) * 100 + '%';
-    t_div.style.background = '#cc5500';
+    t_div.style.position = "absolute";
+    t_div.style.height = "8px";
+    t_div.style.top = "0%";
+    t_div.style.left = (start / duration) * 100 + "%";
+    t_div.style.width = ((end - start) / duration) * 100 + "%";
+    t_div.style.background = "#cc5500";
 
     //locate div that we inject into
-    var p_list = document.getElementsByClassName('controls-slider-track controls-seek-bar')[0];
+    var p_list = document.getElementsByClassName(
+      "controls-slider-track controls-seek-bar"
+    )[0];
 
     //inject div into div
     p_list.appendChild(t_div);
   } else {
-    console.log("host " + window.location.host + " is unsupported at this time.");
+    console.log(
+      "host " + window.location.host + " is unsupported at this time."
+    );
   }
 }
 
@@ -108,5 +114,9 @@ function display_interval(start, end, duration, src) {
 function handleVideo(video) {
   console.log("Video duration: " + video.duration);
   console.log("Video source: " + video.src);
+  video.addEventListener("loadedmetadata", () => {
+    console.log("yo");
+    get_and_display_json_data(video, window.location.href);
+  });
   get_and_display_json_data(video, window.location.href);
 }

@@ -2,24 +2,15 @@
   "name": "EngageMe",
   "version": "1.10.37",
   "description": "Analyzes YouTube Engagement, save time!",
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
+  "permissions": ["storage", "tabs"],
   "background": {
-    "matches": [
-      "*://www.youtube.com/watch*",
-      "*://leccap.engin.umich.edu/leccap/*"
-    ],
-    "scripts":[
-      "jquery-3.4.1.min.js",
-      "background_tracker.js"
-    ]
+    "matches": ["*://www.youtube.com/*", "*://leccap.engin.umich.edu/leccap/*"],
+    "scripts": ["jquery-3.4.1.min.js", "background_tracker.js"]
   },
   "content_scripts": [
     {
       "matches": [
-        "*://www.youtube.com/watch*",
+        "*://www.youtube.com/*",
         "*://leccap.engin.umich.edu/leccap/*"
       ],
       "js": [

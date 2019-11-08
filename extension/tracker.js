@@ -24,16 +24,15 @@ function get_user() {
 }
 // Return the video url, or what we consider a "unique" video key
 function get_url() {
-  var url = window.location.href
+  var url = window.location.href;
   // Chop off the useless stuff
   switch (window.location.host) {
     case "www.youtube.com":
       url = url.split("&")[0];
       break;
   }
-  return url
+  return url;
 }
-
 
 // Given a video, keep track of a user's engagement.
 function tracker_track_engagement(video) {
@@ -52,14 +51,21 @@ function tracker_track_engagement(video) {
     var skip_delta = time - tracker_last_time;
     // Let our background know where our ending points are
     var user = get_user(),
-        url  = get_url();
-    chrome.runtime.sendMessage({type:"interval_end", user:user, url:url, start:tracker_start_interval, time: time, length:video_length});
+      url = get_url();
+    chrome.runtime.sendMessage({
+      type: "interval_end",
+      user: user,
+      url: url,
+      start: tracker_start_interval,
+      time: time,
+      length: video_length
+    });
     //, function(response) {});
     // If we skip over one second, we'll track this as a skip
     // TODO: Arbitrary constant
     if (Math.abs(skip_delta) > 1) {
       var watch_start = tracker_start_interval,
-          watch_end   = tracker_last_time;
+        watch_end = tracker_last_time;
       // If we stutter a little, make sure we don't skip the beginning
       // (duct tape solution: Sometimes, watch_end = watch_time = 0)
       if (watch_end - watch_start > 0.1) {
@@ -79,9 +85,18 @@ function tracker_track_engagement(video) {
 function tracker_send_to_background(start, end, video_length) {
   var user = get_user();
   var url = get_url();
-  chrome.runtime.sendMessage({type:"interval", user:user, url:url, start:start, end:end, length:video_length}, function(response) {
-    console.log("Got something from the background:");
-    console.log(response);
-  });
+  chrome.runtime.sendMessage(
+    {
+      type: "interval",
+      user: user,
+      url: url,
+      start: start,
+      end: end,
+      length: video_length
+    },
+    function(response) {
+      console.log("Got something from the background:");
+      console.log(response);
+    }
+  );
 }
-

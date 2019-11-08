@@ -1,4 +1,4 @@
-// 
+//
 get_video(function(video) {
   console.log("TEST: EXTENSION LOADED");
   // Load and show the engagement intervals from the backend
