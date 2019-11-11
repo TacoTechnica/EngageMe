@@ -70,15 +70,15 @@ class Core {
 
     // Sends relevant compiled data to the server
     send_data(url) {
-        var accum = this.accumulators[url];
-        if (accum === undefined) {
-            return;
-        }
-
-        var real_intervals = accum.get_watch_intervals();
-
-        console.log("SENDING DATA");
         if (!this.offline) {
+            console.log("SENDING DATA");
+            var accum = this.accumulators[url];
+            if (accum === undefined) {
+                return;
+            }
+
+            var real_intervals = accum.get_watch_intervals();
+
             var url = get_server_hostname() + "/api/interval";
             var data = {
                 uuid: get_username(),
@@ -111,6 +111,19 @@ class Core {
         }
 
         delete accum[url];
+    }
+
+    enable() {
+        chrome.storage.sync.set({enabled: true}, function() {
+            console.log("ENABLED");
+        });
+        this.offline = false;
+    }
+    disable() {
+        chrome.storage.sync.set({enabled: false}, function() {
+            console.log("DISABLED");
+        });
+        this.offline = true;
     }
 }
 
@@ -208,6 +221,25 @@ chrome.runtime.onMessage.addListener( async message => {
         return Promise.resolve("Dummy response to keep the console quiet");
     }
 );
+// Communicate with popup
+chrome.extension.onConnect.addListener(function(port) {
+    console.log("Connected .....");
+    port.onMessage.addListener(function(msg) {
+        switch (msg.type) {
+            case "extension_toggle":
+                var val = msg.toggle;
+                if (val) {
+                    core.enable();
+                } else {
+                    core.disable();
+                }
+                break;
+        }
+
+        //  console.log("message recieved" + msg);
+         port.postMessage("Hi Popup.js");
+    });
+})
 
 // TODO: Generate/Find this, figure out what this should be
 function get_username() {

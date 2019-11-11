@@ -27,6 +27,20 @@ class Display {
             var video = evt.detail;
             display.initialize(video);
         });
+
+        // TODO: Need to find video for this to work
+        // This would load the data the moment you enabled the extension, without refresh
+        // chrome.storage.onChanged.addListener(function(changes, namespace) {
+        //     for(key in changes) {
+        //       if(key === 'enabled') {
+        //         var s = changes[key];
+        //         var enabled = s.newValue;
+        //         if (enabled) {
+        //             initialize();
+        //         }
+        //       }
+        //     }
+        // });
     }
 
     // Get everything from the server

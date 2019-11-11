@@ -1,5 +1,13 @@
 // This is global stuff that has to be run at the END
 
+function is_enabled(ontrue) {
+    chrome.storage.sync.get('enabled', function(data) {
+        if (data.enabled) {
+            ontrue();
+        }
+    });
+}
+
 // Add event dispatchers / signals
 function initialize_global_events() {
     var video_type = get_video_type();
@@ -23,10 +31,14 @@ function initialize_global_events() {
             }
             var load_event = new CustomEvent(load_event_name, {detail: vid});
             // Load right now, and also when the video navigation finishes
-            window.dispatchEvent(load_event);
+            is_enabled(() => {
+                window.dispatchEvent(load_event);
+            });
             window.addEventListener('yt-navigate-finish', () => {
-                this.dispatchEvent(unload_event);
-                this.dispatchEvent(load_event);
+                is_enabled(() => {
+                    this.dispatchEvent(unload_event);
+                    this.dispatchEvent(load_event);
+                });
             });
             break;
     }
@@ -34,7 +46,9 @@ function initialize_global_events() {
     // Unload when page unloads, always
     window.addEventListener("beforeunload", evt => {
         evt.preventDefault();
-        this.dispatchEvent(unload_event);
+        is_enabled(() => {
+            this.dispatchEvent(unload_event);
+        });
         return false;
     });
 }

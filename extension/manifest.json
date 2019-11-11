@@ -2,13 +2,14 @@
   "name": "EngageMe Test",
   "version": "1.10.37",
   "description": "Analyzes YouTube Engagement, save time!",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "declarativeContent"],
   "background": {
     "matches": ["*://www.youtube.com/*", "*://leccap.engin.umich.edu/leccap/*"],
     "scripts": [
       "jquery-3.4.1.min.js",
       "globals.js",
-      "background.js"
+      "background/popup_config.js",
+      "background/background.js"
     ]
   },
   "content_scripts": [
@@ -20,13 +21,16 @@
       "js": [
         "jquery-3.4.1.min.js",
         "globals.js",
-        "content_globals.js",
-        "tracker.js",
-        "display.js",
-        "content_globals_init.js"
+        "content/content_globals.js",
+        "content/tracker.js",
+        "content/display.js",
+        "content/content_globals_init.js"
       ]
     }
   ],
+  "browser_action": {
+    "default_popup": "popup/popup.html"
+  },
   "icons": {
     "64": "icon64.png",
     "128": "icon128.png"
