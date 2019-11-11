@@ -28,6 +28,7 @@ class Display {
             display.initialize(video);
         });
 
+        // TODO: Delete old time markers when we unload the extension
         // TODO: Need to find video for this to work
         // This would load the data the moment you enabled the extension, without refresh
         // chrome.storage.onChanged.addListener(function(changes, namespace) {
@@ -35,8 +36,10 @@ class Display {
         //       if(key === 'enabled') {
         //         var s = changes[key];
         //         var enabled = s.newValue;
-        //         if (enabled) {
-        //             initialize();
+        //         if (enabled) { // TODO: FIND VIDEO asynchronously?
+        //             initialize(video);
+        //         } else {
+        //             // REMOVE TIME MARKERS
         //         }
         //       }
         //     }
