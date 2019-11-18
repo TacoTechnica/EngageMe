@@ -1,6 +1,6 @@
 {
   "name": "EngageMe",
-  "version": "1.10.37",
+  "version": "0.0.1",
   "description": "Analyzes YouTube Engagement, save time!",
   "permissions": ["storage", "tabs"],
   "background": {
