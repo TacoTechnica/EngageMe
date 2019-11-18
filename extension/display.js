@@ -37,6 +37,7 @@ function get_and_display_json_data(video, window_url) {
   // structure: [[start,end], [start, end], ...]
   var server_hostname = "https://engageme-be.appspot.com";
   var url = server_hostname + "/api/video?url=" + window_url;
+  clearIntervals(window_url);
   $.ajax({
     url: url,
     type: "GET",
@@ -107,6 +108,23 @@ function display_interval(start, end, duration, src) {
     console.log(
       "host " + window.location.host + " is unsupported at this time."
     );
+  }
+}
+
+function clearIntervals(src) {
+  console.log("clearing!");
+  if (src.indexOf("youtube.com") !== -1) {
+    let p_list = document.getElementsByClassName("ytp-progress-list")[0];
+    while (p_list.lastChild.id == "yt_pt") {
+      p_list.lastChild.remove();
+    }
+  } else if (src.indexOf("leccap.engin.umich.edu") !== -1) {
+    let p_list = document.getElementsByClassName(
+      "controls-slider-track controls-seek-bar"
+    )[0];
+    while (p_list.lastChild.id == "lc_pt") {
+      p_list.lastChild.remove();
+    }
   }
 }
 
